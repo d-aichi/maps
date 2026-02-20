@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom Outline Overlay</title>
+    <meta charset="utf-8" />
+    <style>
+      #map {
+        height: 100vh;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+      function initMap() {
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 18,
+          center: { lat: 35.2145, lng: 135.0553 },
+          mapTypeId: "satellite",
+        });
+
+        const imageBounds = {
+          north: 35.215200,
+          south: 35.212810,
+          east: 135.06133,
+          west: 135.058322,
+        };
+
+        const overlay = new google.maps.GroundOverlay(
+          "https://raw.githubusercontent.com/d-aichi/maps/main/byouinn.png",
+          imageBounds
+        );
+
+        overlay.setMap(map);
+	
+	if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+
+      // Add a marker for your location
+      new google.maps.Marker({
+        position: pos,
+        map: map,
+        title: "You are here",
+      });
+
+      // Center the map on your location
+      map.setCenter(pos);
+    },
+    () => {
+      console.log("User denied Geolocation");
+    }
+  );
+} else {
+  console.log("Browser doesn't support Geolocation");
+}
+      }
+    </script>
+
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6hD07eJ8PZiyUCtJ9jtlM8QtLIYqwK0s&callback=initMap">
+    </script>
+  </body>
+</html>
